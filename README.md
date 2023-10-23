@@ -2,15 +2,12 @@
 
 <div align="center">
 <p>
-    <img width="200" src="https://github.com/JessiXperience/NewJessicaInstaller/blob/main/NewJessicaInstaller_logo.png">
+    <img width="200" src="https://github.com/JessiXperience/NewJessica/blob/alpha/NewJessica_logo.png">
 </p>
-Matrix |
-Telegram |
 
+[Matrix]() |
+[Telegram](https://t.me/JessiXperience) |
 </div>
-
-- [Matrix]()
-- [Telegram](https://t.me/JessiXperience)
 
 NewJessica Installer - это интуитивно понятный установщик с графическим интерфейсом, предназначенный для автоматической установки чита NewJessica на ваш компьютер. С его помощью вы можете быстро и без проблем установить и настроить ваш чит, чтобы начать игру!
 
