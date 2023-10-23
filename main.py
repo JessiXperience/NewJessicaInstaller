@@ -1,5 +1,6 @@
 import sys
 
+import pyuac
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
 import scenes
@@ -29,10 +30,18 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setStyleSheet(styles.Scenes.greeting)
         self.resize(1280, 720)
+        self.setFixedSize(1280, 720)
 
         self.config = self.config_loader()
 
-        self.central = scenes.Greeting(self.config)
+        self.central = scenes.Greeting(self.config, self.unpack)
+
+        self.setCentralWidget(self.central)
+
+    def unpack(self):
+        self.config['paths'] = self.central.get_paths()
+
+        self.central = scenes.Unpacker(self.config)
 
         self.setCentralWidget(self.central)
 

@@ -1,10 +1,15 @@
-from PyQt6.QtWidgets import QHBoxLayout, QWidget, QFileDialog, QPushButton, QLabel
+from PyQt6.QtCore import QUrl, QSize
+from PyQt6.QtGui import QDesktopServices, QIcon
+from PyQt6.QtWidgets import QHBoxLayout, QWidget, QFileDialog, QPushButton, QLabel, QVBoxLayout, QSpacerItem, \
+    QSizePolicy, QMessageBox, QApplication
+
+import styles
+
 
 class ChoicePath(QWidget):
-    def __init__(self, config, next_scene):
+    def __init__(self, config):
         super().__init__()
         self.config = config
-        self.next_scene = next_scene
 
         self.paths = {
             "minecraft": self.config['paths'][self.config['os']].format(self.config['user']),
@@ -40,3 +45,86 @@ class ChoicePath(QWidget):
 
     def get_paths(self):
         return self.paths
+
+
+class StartUnpack(QPushButton):
+    def __init__(self, callback):
+        super().__init__()
+
+        self.setText("Начать установку")
+        self.clicked.connect(callback)
+
+        self.setFixedHeight(32)
+
+
+class Contacts(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.main = QHBoxLayout()
+
+        self.urls = [
+            QPushButton(""),
+            QPushButton(""),
+            QPushButton(""),
+            QPushButton(""),
+            QPushButton(""),
+            QPushButton(""),
+            QPushButton("")
+        ]
+
+        self.urls[0].clicked.connect(lambda: QDesktopServices.openUrl(QUrl("https://github.com/JessiXperience")))
+        self.urls[0].setIcon(QIcon('res/icons/github.png'))
+        self.urls[1].clicked.connect(lambda: QDesktopServices.openUrl(QUrl("https://t.me/JessiXperience")))
+        self.urls[1].setIcon(QIcon('res/icons/telegram.png'))
+        self.urls[2].clicked.connect(lambda: QDesktopServices.openUrl(QUrl("https://t.me/Sompetch")))
+        self.urls[2].setIcon(QIcon('res/icons/telegram.png'))
+        self.urls[3].clicked.connect(self.not_implemented)
+        self.urls[3].setIcon(QIcon('res/icons/matrix.png'))
+        self.urls[4].clicked.connect(self.not_implemented)
+        self.urls[4].setIcon(QIcon('res/icons/youtube.png'))
+        self.urls[5].clicked.connect(self.not_implemented)
+        self.urls[5].setIcon(QIcon('res/icons/mastodon.png'))
+        self.urls[6].clicked.connect(self.not_implemented)
+        self.urls[6].setIcon(QIcon('res/icons/email.png'))
+
+        for index, widget in enumerate(self.urls):
+            if index != 0:
+                self.main.addItem(QSpacerItem(16, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum))
+            widget.setFixedSize(64, 64)
+            widget.setIconSize(QSize(64, 64))
+            widget.setStyleSheet(styles.Contacts.transparent)
+            self.main.addWidget(widget)
+
+        self._vbox = QVBoxLayout()
+        self._hbox = QHBoxLayout()
+
+        self._hbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
+        self._hbox.addItem(self._vbox)
+        self._hbox.addItem(QSpacerItem(32, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding))
+
+        self._vbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
+        self._vbox.addItem(self.main)
+        self._vbox.addItem(QSpacerItem(0, 32, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+
+        self.setLayout(self._hbox)
+
+    @staticmethod
+    def not_implemented():
+        msg = QMessageBox()
+        msg.setWindowTitle("NewJessica")
+        msg.setText("Скоро появится!")
+
+        msg.open()
+
+    @staticmethod
+    def clipboard():
+        c = QApplication.clipboard()
+
+        if c is not None:
+            c.setText('JessiXperience@riseup.net')
+
+            msg = QMessageBox()
+            msg.setWindowTitle("NewJessica")
+            msg.setText("Почта была скопирована!")
+
+            msg.open()
