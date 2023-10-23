@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QUrl, QSize
 from PyQt6.QtGui import QDesktopServices, QIcon
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QFileDialog, QPushButton, QLabel, QVBoxLayout, QSpacerItem, \
-    QSizePolicy, QMessageBox, QApplication
+    QSizePolicy, QMessageBox, QApplication, QDialog, QDialogButtonBox
 
 import styles
 
@@ -84,7 +84,7 @@ class Contacts(QWidget):
         self.urls[4].setIcon(QIcon('res/icons/youtube.png'))
         self.urls[5].clicked.connect(self.not_implemented)
         self.urls[5].setIcon(QIcon('res/icons/mastodon.png'))
-        self.urls[6].clicked.connect(self.not_implemented)
+        self.urls[6].clicked.connect(self.clipboard)
         self.urls[6].setIcon(QIcon('res/icons/email.png'))
 
         for index, widget in enumerate(self.urls):
@@ -108,23 +108,19 @@ class Contacts(QWidget):
 
         self.setLayout(self._hbox)
 
-    @staticmethod
-    def not_implemented():
-        msg = QMessageBox()
-        msg.setWindowTitle("NewJessica")
-        msg.setText("Скоро появится!")
+    def not_implemented(self):
+        try:
+            message = QLabel("Ожидайте в скором времени!")
+            layout = QHBoxLayout()
+            layout.addWidget(message)
 
-        msg.open()
+            dlg = QDialog(self)
+            dlg.setWindowTitle("NewJessica")
+            dlg.setLayout(layout)
+            dlg.exec()
+        except Exception as e:
+            print(e)
 
     @staticmethod
     def clipboard():
-        c = QApplication.clipboard()
-
-        if c is not None:
-            c.setText('JessiXperience@riseup.net')
-
-            msg = QMessageBox()
-            msg.setWindowTitle("NewJessica")
-            msg.setText("Почта была скопирована!")
-
-            msg.open()
+        QApplication.clipboard().setText("JessiXperience@riseup.net")
