@@ -26,8 +26,6 @@ class MainWindow(QMainWindow):
             config['paths'] = config['paths'][config['os']]
         except KeyError:
             print("Ваша операционная система не поддерживается!")
-            input()
-            exit(0)
 
         for key, value in config['paths'].items():
             config['paths'][key] = value.format(user=config['user'])
@@ -53,9 +51,6 @@ class MainWindow(QMainWindow):
 
         self.central = scenes.Unpacker(self.config)
         self.setCentralWidget(self.central)
-
-    def end(self):
-        pass
 
 
 if __name__ == "__main__":
