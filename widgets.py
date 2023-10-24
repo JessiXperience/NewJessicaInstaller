@@ -16,8 +16,8 @@ class ChoicePath(QWidget):
         self.libraries = QHBoxLayout()
         self.versions = QHBoxLayout()
 
-        self.viewer_versions = QLabel(f'   {self.config["paths"]["versions"]}   ')
-        self.viewer_libraries = QLabel(f'   {self.config["paths"]["libraries"]}   ')
+        self.viewer_versions = QLabel(f'   {self.config["paths"]["versions"] + "libraries"}   ')
+        self.viewer_libraries = QLabel(f'   {self.config["paths"]["libraries"] + "libraries"}   ')
         self.choicer_versions = QPushButton("Выбрать путь до версий")
         self.choicer_libraries = QPushButton("Выбрать путь до библиотек")
 
@@ -53,8 +53,8 @@ class ChoicePath(QWidget):
         parent = QFileDialog.getExistingDirectory(self, "Выбрать директорию библиотек", ".")
 
         if parent:
-            self.config["paths"]["libraries"] = parent
-            self.viewer_libraries.setText(f'   {self.config["paths"]["libraries"]}   ')
+            self.config["paths"]["libraries"] = parent + "libraries"
+            self.viewer_libraries.setText(f'   {self.config["paths"]["libraries"] + "libraries"}   ')
 
     def get_config(self):
         return self.config
