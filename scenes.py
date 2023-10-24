@@ -9,37 +9,37 @@ class Greeting(QWidget):
 
         self.config = config
         self.next_scene = next_scene
-        print(self.config['paths'][self.config['os']].format(self.config['user']))
 
         self.main = QVBoxLayout()
 
         self._vbox = QVBoxLayout()
         self._hbox = QHBoxLayout()
+        self._footer = QVBoxLayout()
 
-        self._hbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-        self._hbox.addItem(self._vbox)
-        self._hbox.addWidget(widgets.Contacts())
+        self._vbox.addItem(QSpacerItem(0, 1280, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum))
+        self._vbox.addLayout(self._hbox)
+        self._footer.addItem(QSpacerItem(0, 1280, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
+        self._footer.addWidget(widgets.Splashier())
+        self._vbox.addLayout(self._footer)
 
-        self._vbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-        self._vbox.addItem(self.main)
-        self._vbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
+        self._hbox.addItem(QSpacerItem(300, 0, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding))
+        self._hbox.addItem(self.main)
+        self._hbox.addItem(QSpacerItem(300, 0, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding))
 
         self.widgets = {
-            "choice path": widgets.ChoicePath(self.config),
+            "paths": widgets.ChoicePath(self.config),
             "start": widgets.StartUnpack(self.next_scene)
         }
 
-        self.main.addWidget(self.widgets["choice path"])
+        self.main.addWidget(self.widgets["paths"])
         self.main.addWidget(self.widgets["start"])
 
-        self.setLayout(self._hbox)
+        self.setLayout(self._vbox)
 
-    def get_paths(self):
-        return self.widgets["choice path"].get_paths()
+    def get_config(self):
+        return self.widgets["paths"].get_config()
 
 class Unpacker(QWidget):
     def __init__(self, config):
         super().__init__()
         self.config = config
-
-        print(self.config)
