@@ -90,7 +90,8 @@ class Unpacker(QWidget):
         files = []
 
         if 'commit' not in branch_data:
-            print('Ветка не найдена')
+            self.main.setFormat(f"Произошла ошибка при загрузке. Пожалуйста, обновите установщик.")
+            return
         else:
             commit_sha = branch_data['commit']['sha']
             tree_url = f'https://api.github.com/repos/{username}/{reponame}/git/trees/{commit_sha}?recursive=1'
@@ -98,8 +99,8 @@ class Unpacker(QWidget):
             tree_data = tree_response.json()
 
             if 'tree' not in tree_data:
-                print('Дерево файлов не найдено')
-                exit(1)
+                self.main.setFormat(f"Произошла ошибка при загрузке. Пожалуйста, обновите установщик.")
+                return
             else:
                 _files = [file['path'] for file in tree_data['tree'] if file['type'] == 'blob']
                 for file in _files:
@@ -116,7 +117,6 @@ class Unpacker(QWidget):
 
             self.main.setFormat(f"Download | {file}")
 
-            print(file, directory, sep=" | ")
             os.makedirs(os.path.dirname(directory), exist_ok=True)
 
             raw_url = f'https://raw.githubusercontent.com/{username}/{reponame}/files/{file}'

@@ -64,8 +64,6 @@ class StartUnpack(QPushButton):
     def __init__(self, callback):
         super().__init__()
 
-        print(callback)
-
         self.setText("Начать установку")
         self.clicked.connect(callback)
 
