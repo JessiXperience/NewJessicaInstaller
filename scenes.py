@@ -111,6 +111,8 @@ class Unpacker(QWidget):
 
         time.sleep(0.5)
 
+        step = 100 // len(files)
+
         for file, directory in files:
             if not threading.main_thread().is_alive():
                 break
@@ -129,8 +131,9 @@ class Unpacker(QWidget):
             else:
                 self.main.setFormat(f"Произошла ошибка при загрузке. Пожалуйста, обновите установщик.")
                 break
+
+            if self.main.value() + step < 100:
+                self.main.setValue(self.main.value() + step)
         else:
             self.main.setFormat(f"Загрузка завершена!")
             return
-
-        self.main.setValue(100)
