@@ -75,8 +75,6 @@ class Unpacker(QWidget):
         self.loading = threading.Thread(target=self.loader)
         self.loading.start()
 
-
-
     def loader(self):
         self.main.setFormat("Loading...")
         time.sleep(0.5)
@@ -132,8 +130,8 @@ class Unpacker(QWidget):
                 self.main.setFormat(f"Произошла ошибка при загрузке. Пожалуйста, обновите установщик.")
                 break
 
-            if self.main.value() + step < 100:
-                self.main.setValue(self.main.value() + step)
+            # if self.main.value() + step < 100:
+            #     self.main.setValue(self.main.value() + step)
         else:
             self.main.setFormat(f"Загрузка завершена!")
             return
