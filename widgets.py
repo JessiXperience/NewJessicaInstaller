@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QUrl, QSize
 from PyQt6.QtGui import QDesktopServices, QIcon
 from PyQt6.QtWidgets import QHBoxLayout, QWidget, QFileDialog, QPushButton, QLabel, QVBoxLayout, QSpacerItem, \
-    QSizePolicy, QMessageBox, QApplication, QDialog, QDialogButtonBox
+    QSizePolicy, QApplication, QDialog
 
 import styles
 
@@ -11,40 +11,53 @@ class ChoicePath(QWidget):
         super().__init__()
         self.config = config
 
-        self.paths = {
-            "minecraft": self.config['paths'][self.config['os']].format(self.config['user']),
-            "libraries": self.config['paths'][self.config['os']].format(self.config['user']) + "\\libraries",
-            "version": self.config['paths'][self.config['os']].format(self.config['user']) + "\\versions"
-        }
+        self.main = QVBoxLayout()
 
-        self.main = QHBoxLayout()
-        self.viewer = QLabel(f'   {self.paths["minecraft"]}   ')
-        self.choicer = QPushButton("Выбрать путь")
+        self.libraries = QHBoxLayout()
+        self.versions = QHBoxLayout()
 
-        self.viewer.setFixedHeight(32)
-        self.choicer.setFixedHeight(32)
+        self.viewer_versions = QLabel(f'   {self.config["paths"]["versions"]}   ')
+        self.viewer_libraries = QLabel(f'   {self.config["paths"]["libraries"]}   ')
+        self.choicer_versions = QPushButton("Выбрать путь до версий")
+        self.choicer_libraries = QPushButton("Выбрать путь до библиотек")
 
-        self.choicer.clicked.connect(self.choice_path)
+        self.viewer_versions.setFixedHeight(32)
+        self.viewer_libraries.setFixedHeight(32)
+        self.choicer_versions.setFixedHeight(32)
+        self.choicer_versions.setFixedWidth(160)
+        self.choicer_libraries.setFixedHeight(32)
+        self.choicer_libraries.setFixedWidth(160)
 
-        self.main.addWidget(self.viewer)
-        self.main.addWidget(self.choicer)
+        self.choicer_versions.clicked.connect(self.choice_versions)
+        self.choicer_libraries.clicked.connect(self.choice_libraries)
+
+        self.libraries.addWidget(self.viewer_libraries)
+        self.libraries.addWidget(self.choicer_libraries)
+
+        self.versions.addWidget(self.viewer_versions)
+        self.versions.addWidget(self.choicer_versions)
+
+        self.main.addLayout(self.versions)
+        self.main.addLayout(self.libraries)
 
         self.setLayout(self.main)
 
-    def choice_path(self):
-        parent = QFileDialog.getExistingDirectory(self, "Выбрать директорию", ".")
+    def choice_versions(self):
+        parent = QFileDialog.getExistingDirectory(self, "Выбрать директорию версий", ".")
 
         if parent:
-            self.paths = {
-                "minecraft": parent,
-                "libraries": parent + "\\libraries",
-                "version": parent + "\\versions"
-            }
+            self.config["paths"]["versions"] = parent
+            self.viewer_versions.setText(f'   {self.config["paths"]["versions"]}   ')
 
-            self.viewer.setText(f'   {self.paths["minecraft"]}   ')
+    def choice_libraries(self):
+        parent = QFileDialog.getExistingDirectory(self, "Выбрать директорию библиотек", ".")
 
-    def get_paths(self):
-        return self.paths
+        if parent:
+            self.config["paths"]["libraries"] = parent
+            self.viewer_libraries.setText(f'   {self.config["paths"]["libraries"]}   ')
+
+    def get_config(self):
+        return self.config
 
 
 class StartUnpack(QPushButton):
@@ -56,6 +69,23 @@ class StartUnpack(QPushButton):
 
         self.setFixedHeight(32)
 
+
+class Splashier(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self._hbox = QHBoxLayout()
+        self._vbox = QVBoxLayout()
+
+        self._vbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum))
+        self._vbox.addWidget(Contacts())
+        self._vbox.addItem(QSpacerItem(0, 32, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+
+        self._hbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding))
+        self._hbox.addLayout(self._vbox)
+        self._hbox.addItem(QSpacerItem(32, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding))
+
+        self.setLayout(self._hbox)
 
 class Contacts(QWidget):
     def __init__(self):
@@ -95,31 +125,23 @@ class Contacts(QWidget):
             widget.setStyleSheet(styles.Contacts.transparent)
             self.main.addWidget(widget)
 
-        self._vbox = QVBoxLayout()
         self._hbox = QHBoxLayout()
 
-        self._hbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-        self._hbox.addItem(self._vbox)
-        self._hbox.addItem(QSpacerItem(32, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding))
-
-        self._vbox.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-        self._vbox.addItem(self.main)
-        self._vbox.addItem(QSpacerItem(0, 32, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+        self._hbox.addItem(QSpacerItem(1280, 0, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Expanding))
+        self._hbox.addItem(self.main)
+        self._hbox.addItem(QSpacerItem(32, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum))
 
         self.setLayout(self._hbox)
 
     def not_implemented(self):
-        try:
-            message = QLabel("Ожидайте в скором времени!")
-            layout = QHBoxLayout()
-            layout.addWidget(message)
+        message = QLabel("Ожидайте в скором времени!")
+        layout = QHBoxLayout()
+        layout.addWidget(message)
 
-            dlg = QDialog(self)
-            dlg.setWindowTitle("NewJessica")
-            dlg.setLayout(layout)
-            dlg.exec()
-        except Exception as e:
-            print(e)
+        dlg = QDialog(self)
+        dlg.setWindowTitle("NewJessica")
+        dlg.setLayout(layout)
+        dlg.exec()
 
     @staticmethod
     def clipboard():

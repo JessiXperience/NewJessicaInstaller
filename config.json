@@ -1,6 +1,12 @@
 {
   "paths": {
-    "nt": "C:\\Users\\{}\\AppData\\Roaming\\.minecraft",
-    "linux": "{}"
+    "nt": {
+      "versions": "C:/Users/{user}/AppData/Roaming/.tlauncher/legacy/Minecraft/game/versions/",
+      "libraries": "C:/Users/{user}/AppData/Roaming/.tlauncher/legacy/Minecraft/launcher/"
+    },
+    "posix":  {
+      "versions": "/home/{user}/.minecraft/versions",
+      "libraries": "/home/{user}/.minecraft/versions"
+    }
   }
 }
