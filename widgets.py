@@ -24,9 +24,9 @@ class ChoicePath(QWidget):
         self.viewer_versions.setFixedHeight(32)
         self.viewer_libraries.setFixedHeight(32)
         self.choicer_versions.setFixedHeight(32)
-        self.choicer_versions.setFixedWidth(160)
+        self.choicer_versions.setFixedWidth(192)
         self.choicer_libraries.setFixedHeight(32)
-        self.choicer_libraries.setFixedWidth(160)
+        self.choicer_libraries.setFixedWidth(192)
 
         self.choicer_versions.clicked.connect(self.choice_versions)
         self.choicer_libraries.clicked.connect(self.choice_libraries)

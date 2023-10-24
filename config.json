@@ -6,7 +6,7 @@
     },
     "posix":  {
       "versions": "/home/{user}/.minecraft/versions",
-      "libraries": "/home/{user}/.minecraft/versions"
+      "libraries": "/home/{user}/.minecraft/libraries"
     }
   }
 }
